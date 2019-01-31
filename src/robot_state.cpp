@@ -27,7 +27,7 @@ typedef enum publisherStatus
 
 double wheelbase, wheelRight, wheelLeft, baseHeight, wheelDiameter, distancePerEncoderRevolution, gearRatio;
 double laserX, laserY, laserZ, laserTheta, imuX, imuY, imuZ, imuTheta, kp, ki, kd, pidInputLimit;
-double ppr, minControl, minSpeed;
+double ppr, minControl, minSpeed, maxSpeed;
 bool flipEncoderLeft, flipEncoderRight, flipControlLeft, flipControlRight, highInertia;
 library::IMU accBias, gyroBias;
 publisherStatus status;
@@ -50,7 +50,6 @@ void initialize(library::Driver2Sensor sensor)
     double dt = (t - prevT).toSec();
 
     averageRate += dt;
-
     accBias.x += sensor.accelerometer.x;
     accBias.y += sensor.accelerometer.y;
     accBias.z += sensor.accelerometer.z;
@@ -101,6 +100,20 @@ void wheelControlFix(double *control, double minControl, double target, double m
         else
             *control = minControl;
     }
+}
+
+double speedRemapping(double input, double originalMin, double originalMax, double min, double max)
+{
+    if (input == 0)
+        return 0;
+    if (input < 0)
+    {
+        originalMin *= -1;
+        originalMax *= -1;
+        min *= -1;
+        max *= -1;
+    }
+    return input / (originalMax - originalMin) * (max - min) + min;
 }
 
 void publish(library::Driver2Sensor sensor)
@@ -188,10 +201,26 @@ void publish(library::Driver2Sensor sensor)
 
     // Control update
 
-    double maxSpeed = 1; // Meter/s
+    double speedLimit = 1; // Meter/s
 
-    double eLeft = (wheelTargetSpeed.left - vLeft) / maxSpeed;
-    double eRight = (wheelTargetSpeed.right - vRight) / maxSpeed;
+    // Input Bound
+    // ROS_INFO("%f %f", wheelTargetSpeed.left, wheelTargetSpeed.right);
+    wheelTargetSpeed.left = wheelTargetSpeed.left > speedLimit ? speedLimit : wheelTargetSpeed.left;
+    wheelTargetSpeed.right = wheelTargetSpeed.right > speedLimit ? speedLimit : wheelTargetSpeed.right;
+    wheelTargetSpeed.left = wheelTargetSpeed.left < -speedLimit ? -speedLimit : wheelTargetSpeed.left;
+    wheelTargetSpeed.right = wheelTargetSpeed.right < -speedLimit ? -speedLimit : wheelTargetSpeed.right;
+
+    if (highInertia)
+    {
+        // Remapping of input
+        wheelTargetSpeed.left = speedRemapping(wheelTargetSpeed.left, 0, speedLimit, minSpeed, maxSpeed);
+        wheelTargetSpeed.right = speedRemapping(wheelTargetSpeed.right, 0, speedLimit, minSpeed, maxSpeed);
+    }
+
+    // Input Bound Updated
+
+    double eLeft = (wheelTargetSpeed.left - vLeft) / speedLimit;
+    double eRight = (wheelTargetSpeed.right - vRight) / speedLimit;
 
     // integral directional reset
     if ((wheelTargetSpeed.left > 0 && eI.left < 0) || (wheelTargetSpeed.left < 0 && eI.left > 0))
@@ -209,18 +238,19 @@ void publish(library::Driver2Sensor sensor)
     // Special settings to overcome high load inertia
     if (highInertia)
     {
-        if (-minSpeed < wheelTargetSpeed.left && wheelTargetSpeed.left < minSpeed)
+        // Error Reset for high inertia
+        if (-minSpeed < wheelTargetSpeed.left && wheelTargetSpeed.left < minSpeed && wheelTargetSpeed.left == 0)
             eI.left = 0;
-        else if (minSpeed < wheelTargetSpeed.left && eI.left < minControl)
-            eI.left = minControl;
-        else if (-minSpeed > wheelTargetSpeed.left && eI.left > -minControl)
-            eI.left = -minControl;
-        if (-minSpeed < wheelTargetSpeed.right && wheelTargetSpeed.right < minSpeed)
+        // else if (minSpeed < wheelTargetSpeed.left && eI.left < minControl)
+        //     eI.left = minControl;
+        // else if (-minSpeed > wheelTargetSpeed.left && eI.left > -minControl)
+        //     eI.left = -minControl;
+        if (-minSpeed < wheelTargetSpeed.right && wheelTargetSpeed.right < minSpeed && wheelTargetSpeed.right == 0)
             eI.right = 0;
-        else if (minSpeed < wheelTargetSpeed.right && eI.right < minControl)
-            eI.right = minControl;
-        else if (-minSpeed > wheelTargetSpeed.right && eI.right > -minControl)
-            eI.right = -minControl;
+        // else if (minSpeed < wheelTargetSpeed.right && eI.right < minControl)
+        //     eI.right = minControl;
+        // else if (-minSpeed > wheelTargetSpeed.right && eI.right > -minControl)
+        //     eI.right = -minControl;
         // wheelControlFix(&wheelControls.left, minControl, wheelTargetSpeed.left, minSpeed, vLeft);
         // wheelControlFix(&wheelControls.right, minControl, wheelTargetSpeed.right, minSpeed, vRight);
     }
@@ -375,6 +405,7 @@ int main(int argc, char **argv)
 
     nh.param<bool>("highInertia", highInertia, false);
     nh.param<double>("minimumSpeed", minSpeed, 0.175);
+    nh.param<double>("maximumSpeed", maxSpeed, 0.25);
     nh.param<double>("minimumControl", minControl, 0.35);
     nh.param<bool>("flipControlLeft", flipControlLeft, false);
     nh.param<bool>("flipControlRight", flipControlRight, false);

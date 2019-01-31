@@ -8,7 +8,7 @@
     <param name="kd" value="0.00"/>
     <param name="pidInputLimit" value="0.5"/>
     <param name="pidControllerOutputLimit" value="0.5"/>
-    <!-- <param name="highInertia" value="true"/>    -->
+    <param name="highInertia" value="true"/>   
     <param name="flipEncoderLeft" value="false"/>
     <param name="flipEncoderRight" value="false"/> 
     <param name="flipControlLeft" value="false"/>

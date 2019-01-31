@@ -17,7 +17,7 @@ TebLocalPlannerROS:
  min_in_place_rotational_vel: 0.5
  backup_vel: 0.2
  max_vel_x: 0.3
- max_vel_x_backwards: 0.3
+ max_vel_x_backwards: 0
  max_vel_theta: 0.75
  acc_lim_x: 0.5
  acc_lim_theta: 0.5
