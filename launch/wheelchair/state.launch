@@ -1,0 +1,18 @@
+<launch>
+  <node name="robot_state" pkg="base" type="robot_state" output="screen">
+    <param name="wheelbase" value="0.574"/>
+    <param name="wheelDiameter" value="0.25"/>
+    <param name="gearRatio" value="0.31971580817"/>
+    <param name="kp" value="0.10"/>
+    <param name="ki" value="0.30"/>
+    <param name="kd" value="0.00"/>
+    <param name="pidInputLimit" value="0.5"/>
+    <param name="pidControllerOutputLimit" value="0.5"/>
+    <!-- <param name="highInertia" value="true"/>    -->
+    <param name="flipEncoderLeft" value="false"/>
+    <param name="flipEncoderRight" value="false"/> 
+    <param name="flipControlLeft" value="false"/>
+    <param name="flipControlRight" value="false"/> 
+    <param name="pulsePerRevolution" value="2000"/>
+  </node>
+</launch>
