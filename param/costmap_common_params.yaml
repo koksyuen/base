@@ -1,10 +1,10 @@
 obstacle_range: 3.0
-raytrace_range: 3.5
+raytrace_range: 3.0
 
 # footprint: [[-0.5, -0.5], [-0.5, 0.5], [0.5, 0.5], [0.5, -0.5]]
 robot_radius: 0.5
 
-inflation_radius: 1.0
+inflation_radius: 0.5
 cost_scaling_factor: 1.0
 
 observation_sources: scan

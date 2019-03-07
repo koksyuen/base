@@ -221,6 +221,9 @@ void publish(library::Driver2Sensor sensor)
 
     double eLeft = (wheelTargetSpeed.left - vLeft) / speedLimit;
     double eRight = (wheelTargetSpeed.right - vRight) / speedLimit;
+    // Limit Error
+    eLeft = eLeft > 1 ?  1 : eLeft < -1 ? -1 : eLeft;
+    eRight = eRight > 1 ?  1 : eRight < -1 ? -1 : eRight;
 
     // integral directional reset
     if ((wheelTargetSpeed.left > 0 && eI.left < 0) || (wheelTargetSpeed.left < 0 && eI.left > 0))
