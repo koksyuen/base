@@ -3,7 +3,7 @@
   <name>base</name>
   <version>0.0.0</version>
   <description>The generic robot package</description>
-  <maintainer email="danny@todo.todo">danny</maintainer>
+  <maintainer email="ngwk@utar.edu.my">Danny Ng</maintainer>
   <license>TODO</license>
   <buildtool_depend>catkin</buildtool_depend>
   
