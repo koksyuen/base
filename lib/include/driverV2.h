@@ -15,8 +15,8 @@ namespace library
 class Encoder
 {
 public:
-  double left;
-  double right;
+  int left;
+  int right;
 };
 
 class IMU
@@ -46,7 +46,7 @@ public:
 
   void start();
   void keepAlive();
-  void UpdateControls(double, double);
+  void UpdateControls(double left, double right);
 
   function<void(Driver2Sensor)> onData;
 

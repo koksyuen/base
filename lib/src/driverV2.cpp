@@ -109,8 +109,8 @@ Driver2Sensor DriverV2::checkFrame()
         }
         if (received[received.size() - 2] == sum)
         {
-            sensor.encoder.left = int16_t(received[7] << 8 | received[8]) + ((double)int16_t(received[9] << 8 | received[10])) / 2000;
-            sensor.encoder.right = int16_t(received[11] << 8 | received[12]) + ((double)int16_t(received[13] << 8 | received[14])) / 2000;
+            sensor.encoder.left = floatConvertor(uint32Convertor(&received[7])) * 10000;
+            sensor.encoder.right = floatConvertor(uint32Convertor(&received[11])) * 10000;
 
             sensor.accelerometer.x = floatConvertor(uint32Convertor(&received[15])) * 9.80665;
             sensor.accelerometer.y = floatConvertor(uint32Convertor(&received[19])) * 9.80665;

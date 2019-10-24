@@ -1,5 +1,0 @@
-<launch>
-  <include file="$(find base)/launch/wheelchair/state.launch"></include>
-  <include file="$(find base)/launch/laser/urg04lx.launch"></include>
-  <include file="$(find base)/launch/slam/cartographer.launch"></include>
-</launch>

@@ -1,8 +1,0 @@
-<launch>
-  <include file="$(find base)/launch/wheelchair/state.launch"></include>
-  <include file="$(find base)/launch/laser/urg04lx.launch"></include>
-  <include file="$(find base)/launch/map/server.launch"/>
-  <include file="$(find base)/launch/localization/amcl.launch"/>
-  <include file="$(find base)/launch/move/teb.launch"></include>
-  <node type="rviz" name="rviz" pkg="rviz"/>
-</launch>

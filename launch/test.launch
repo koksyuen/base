@@ -1,0 +1,17 @@
+<launch>
+    <node name="robot_state" pkg="base" type="robot_state" output="screen">
+        <param name="baseWidth" value="0.574"/>
+        <param name="baseHeight" value="0.25"/>
+        <param name="wheelDiameter" value="0.127"/>
+        <param name="pulsePerRevolution" value="416"/>
+        <param name="flipEncoderRight" value="true"/>
+        <param name="flipControlRight" value="true"/>
+        <param name="maxLinearVelocity" value="0.5"/>
+        <param name="maxAngularVelocity" value="0.9"/>
+        <param name="driverOutputLimit" value="0.3"/>
+        <param name="pidDebug" value="true"/>
+        <param name="kp" value="0.5"/>
+        <param name="ki" value="0.02"/>
+        <param name="kd" value="0"/>
+    </node>
+</launch>

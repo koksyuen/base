@@ -1,4 +1,0 @@
-<launch>
-  <include file="$(find base)/launch/square/state.launch"></include>
-  <include file="$(find base)/launch/map/static.launch"></include>
-</launch>
