@@ -11,8 +11,8 @@
         <param name="driverOutputLimit" value="0.3"/>
         <param name="pidDebug" value="true"/>
         <param name="kp" value="0.2"/>
-        <param name="ki" value="0.05"/>
-        <param name="kd" value="0"/>
+        <param name="ki" value="0.1"/>
+        <param name="kd" value="0.01"/>
         <param name="pidAcceptedError" value = "0.01"/>
     </node>
 </launch>
