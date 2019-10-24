@@ -10,8 +10,8 @@
         <param name="maxAngularVelocity" value="0.9"/>
         <param name="driverOutputLimit" value="0.3"/>
         <param name="pidDebug" value="true"/>
-        <param name="kp" value="0.5"/>
-        <param name="ki" value="0.02"/>
+        <param name="kp" value="0.2"/>
+        <param name="ki" value="0.05"/>
         <param name="kd" value="0"/>
     </node>
 </launch>
