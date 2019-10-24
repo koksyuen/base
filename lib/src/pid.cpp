@@ -1,10 +1,12 @@
 #include "pid.h"
+#include "math.h"
 
-Pid::Pid(double kp, double ki, double kd)
+Pid::Pid(double kp, double ki, double kd, double acceptedError)
 {
     this->kp = kp;
     this->ki = ki;
     this->kd = kd;
+    this->acceptedError = acceptedError;
     pid = 0;
     error_last = 0;
     error_sum = 0;
@@ -18,7 +20,8 @@ void Pid::set(double target)
 double Pid::compute(double current, double dt)
 {
     error = target - current;
-    // pid = kp * error + ki * error_sum * dt + kd * (error - error_last) / dt;
+    if (abs(error) < this->acceptedError)
+        error = 0;
     pid = kp * error + ki * error_sum * dt + kd * (error - error_last) / dt;
     error_last = error;
     error_sum += error;

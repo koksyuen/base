@@ -13,5 +13,6 @@
         <param name="kp" value="0.2"/>
         <param name="ki" value="0.05"/>
         <param name="kd" value="0"/>
+        <param name="pidAcceptedError" value = "0.01"/>
     </node>
 </launch>

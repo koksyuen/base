@@ -31,7 +31,9 @@ void onData(library::Driver2Sensor sensor)
         return;
     }
     ros::Time t = ros::Time::now();
-    double dt = (t - prevT).toSec();
+    // double dt = (t - prevT).toSec();
+    // dt handle by interrupt in device
+    double dt = 0.05;
     double dl = distancePerPulseLeft * sensor.encoder.left;
     double dr = distancePerPulseRight * sensor.encoder.right;
 
@@ -183,12 +185,13 @@ int main(int argc, char **argv)
 
     nh.param<bool>("pidDebug", pidDebug, false);
 
-    double kp, ki, kd;
+    double kp = 0.01, ki = 0, kd = 0, acceptedError = 0;
     nh.param<double>("kp", kp, 0.01);
     nh.param<double>("ki", ki, 0);
     nh.param<double>("kd", kd, 0);
-    Pid _pidLeft(kp, ki, kd);
-    Pid _pidRight(kp, ki, kd);
+    nh.param<double>("pidAcceptedError", acceptedError, 0);
+    Pid _pidLeft(kp, ki, kd, acceptedError);
+    Pid _pidRight(kp, ki, kd, acceptedError);
 
     pidLeft = &_pidLeft;
     pidRight = &_pidRight;
@@ -235,14 +238,6 @@ int main(int argc, char **argv)
     ROS_INFO("Left: %s Right: %s", flipControlLeft ? "true" : "false", flipControlRight ? "true" : "false");
     ROS_INFO("Distance per pulse left : %f", distancePerPulseLeft);
     ROS_INFO("Distance per pulse right: %f", distancePerPulseRight);
-
-    // ROS_INFO("Controls:");
-    // ROS_INFO("Kp: %f, Ki: %f, Kd: %f, Output limit: %f", kp, ki, kd, bound);
-    // ROS_INFO("Encoder Pulse Per Revolution: %f", ppr);
-    // ROS_INFO("Distance Per Encoder Revolution: %f", distancePerEncoderRevolution);
-    // ROS_INFO("High Inertia: %s", highInertia ? "true" : "false");
-    // if (highInertia)
-    //     ROS_INFO("Minimum Speed: %f, Minimum Control: %f", minSpeed, minControl);
 
     // Display end
 
