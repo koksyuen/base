@@ -59,16 +59,25 @@ void onData(library::Driver2Sensor sensor)
     // Rescale target to fit encoder resolution to reduce error due to resolution
 
     double targetLeft, targetRight;
-    targetLeft = round(wheelTargetSpeed.left / distancePerPulseLeft) * distancePerPulseLeft;
-    targetRight = round(wheelTargetSpeed.right / distancePerPulseRight) * distancePerPulseRight;
+    static double controlLeft = 0, controlRight = 0;
+
+    targetLeft = round(wheelTargetSpeed.left / (distancePerPulseLeft / dt)) * (distancePerPulseLeft / dt);
+    targetRight = round(wheelTargetSpeed.right / (distancePerPulseRight / dt)) * (distancePerPulseRight / dt);
     // Speed PID
     pidLeft->set(targetLeft);
     pidRight->set(targetRight);
 
-    wheelControls.left = pidLeft->compute(vLeft, dt);
-    wheelControls.right = pidRight->compute(vRight, dt);
+    double pidControlLeft = pidLeft->compute(vLeft, dt);
+    double pidControlRight = pidRight->compute(vRight, dt);
+
+    wheelControls.left = controlLeft + pidControlLeft;
+    wheelControls.right = controlRight + pidControlRight;
+
+    controlLeft = targetLeft == 0 && pidControlLeft == 0 && vLeft == 0 ? 0 : wheelControls.left;
+    controlRight = targetRight == 0 && pidControlRight == 0 && vRight == 0 ? 0 : wheelControls.right;
+
     if (pidDebug)
-        ROS_INFO("%f | % 3d % 1.3f, % 1.3f, % 1.3f, % 1.3f, % 1.3f | % 3d % 1.3f, % 1.3f, % 1.3f, % 1.3f, % 1.3f", dt, sensor.encoder.left, wheelTargetSpeed.left, targetLeft, vLeft, pidLeft->error, wheelControls.left, sensor.encoder.right, wheelTargetSpeed.right, targetRight, vRight, pidRight->error, wheelControls.right);
+        ROS_INFO("%f | % 3d % 1.4f, % 1.4f, % 1.4f, % 1.4f, % 1.4f | % 3d % 1.4f, % 1.4f, % 1.4f, % 1.4f, % 1.4f", dt, sensor.encoder.left, wheelTargetSpeed.left, targetLeft, vLeft, pidLeft->error, wheelControls.left, sensor.encoder.right, wheelTargetSpeed.right, targetRight, vRight, pidRight->error, wheelControls.right);
 
     // Publish data
 
