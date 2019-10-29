@@ -4,6 +4,7 @@
         <param name="baseHeight" value="0.25"/>
         <param name="wheelDiameter" value="0.127"/>
         <param name="pulsePerRevolution" value="416"/>
+        <param name="flipEncoderLeft" value="true"/>
         <param name="flipEncoderRight" value="true"/>
         <param name="flipControlRight" value="true"/>
         <param name="maxLinearVelocity" value="0.5"/>

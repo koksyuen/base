@@ -66,7 +66,7 @@ void onData(library::Driver2Sensor sensor)
     wheelControls.left = pidLeft->compute(vLeft, dt);
     wheelControls.right = pidRight->compute(vRight, dt);
     if (pidDebug)
-        ROS_INFO("%f | % 1.4f, % 1.4f, % 1.4f, % 1.4f | % 1.4f, % 1.4f, % 1.4f, % 1.4f", dt, wheelTargetSpeed.left, vLeft, pidLeft->error, wheelControls.left, wheelTargetSpeed.right, vRight, pidRight->error, wheelControls.right);
+        ROS_INFO("%f | % 4d % 1.4f, % 1.4f, % 1.4f, % 1.4f | % 4d % 1.4f, % 1.4f, % 1.4f, % 1.4f", dt, sensor.encoder.left, wheelTargetSpeed.left, vLeft, pidLeft->error, wheelControls.left, sensor.encoder.right, wheelTargetSpeed.right, vRight, pidRight->error, wheelControls.right);
 
     // Publish data
 
