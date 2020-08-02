@@ -20,7 +20,7 @@ void Pid::set(double target)
 double Pid::compute(double current, double dt)
 {
     error = target - current;
-    if (abs(error) < this->acceptedError)
+    if (fabs(error) < this->acceptedError)
         error = 0;
     pid = kp * error + ki * error_sum * dt + kd * (error - error_last) / dt;
     error_last = error;
