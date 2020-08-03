@@ -39,4 +39,6 @@ include_directories(
 )
 
 add_executable(robot_state src/robot_state.cpp ${LIB_SRC})
+add_dependencies(robot_state ${${PROJECT_NAME}_EXPORTED_TARGETS})
+
 target_link_libraries(robot_state ${catkin_LIBRARIES})
