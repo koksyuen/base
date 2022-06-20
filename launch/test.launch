@@ -15,5 +15,6 @@
         <param name="ki" value="0.1"/>
         <param name="kd" value="0.01"/>
         <param name="pidAcceptedError" value = "0.01"/>
+        <param name="port" value = "/dev/ttyUSB0"/>
     </node>
 </launch>
