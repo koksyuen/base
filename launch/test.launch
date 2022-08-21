@@ -1,4 +1,6 @@
 <launch>
+    <param name ="/use_sim_time" value="false"/>
+
     <node name="robot_state" pkg="base" type="robot_state" output="screen">
         <param name="baseWidth" value="0.574"/>
         <param name="baseHeight" value="0.25"/>
@@ -15,6 +17,6 @@
         <param name="ki" value="0.1"/>
         <param name="kd" value="0.01"/>
         <param name="pidAcceptedError" value = "0.01"/>
-        <param name="port" value = "/dev/ttyUSB0"/>
+        <param name="port" value = "/dev/robot"/>
     </node>
 </launch>
