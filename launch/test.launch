@@ -1,7 +1,14 @@
 <launch>
     <param name ="/use_sim_time" value="false"/>
 
-    <node name="robot_state" pkg="base" type="robot_state" output="screen">
+    <node name="keyboard_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen">
+        <param name="speed" value="0.3"/>
+        <param name="turn" value="0.3"/>
+    </node>
+
+
+
+    <node name="robot_state" pkg="base" type="robot_state">
         <param name="baseWidth" value="0.574"/>
         <param name="baseHeight" value="0.25"/>
         <param name="wheelDiameter" value="0.127"/>
